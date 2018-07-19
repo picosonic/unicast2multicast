@@ -13,7 +13,7 @@ Note that super user priviledges may be required to run this.
 
 ## Syntax :
 
-`unicast2multicast -i incoming_ip:port -m multicast_group[:port] [-o outgoing_interface_IP]
+`unicast2multicast -i incoming_ip:port -m multicast_group[:port] [-o outgoing_interface_IP]`
 
 ## Where :
 
