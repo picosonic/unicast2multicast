@@ -55,11 +55,11 @@ int main(int argc, char **argv)
   ssize_t outcnt;
 
   int argn=0;
-  char ip_in[256]="";
-  char ip_out[256]="";
-  char multicast_addr[256]="";
-  int port_in;
-  int port_out;
+  char ip_in[INET_ADDRSTRLEN+1]="";
+  char ip_out[INET_ADDRSTRLEN+1]="";
+  char multicast_addr[INET_ADDRSTRLEN+1]="";
+  unsigned int port_in;
+  unsigned int port_out;
 
   /*****************************************************************/
   /* Parse command line */
@@ -84,10 +84,19 @@ int main(int argc, char **argv)
       if (colonpos!=NULL)
       {
         colonpos[0]=0;
-        strcpy(ip_in, argv[argn]);
 
-        if (sscanf(&colonpos[1], "%d", &port_in)==0)
-          port_in=0;
+        if (strlen(argv[argn])<INET_ADDRSTRLEN)
+        {
+          strcpy(ip_in, argv[argn]);
+
+          if (sscanf(&colonpos[1], "%5u", &port_in)==0)
+            port_in=0;
+        }
+        else
+        {
+          showargs();
+          return 1;
+        }
       }
       else
       {
@@ -106,20 +115,47 @@ int main(int argc, char **argv)
       if (colonpos!=NULL)
       {
         colonpos[0]=0;
-        strcpy(multicast_addr, argv[argn]);
 
-        if (sscanf(&colonpos[1], "%d", &port_out)==0)
-          port_out=0;
+        if (strlen(argv[argn])<INET_ADDRSTRLEN)
+        {
+          strcpy(multicast_addr, argv[argn]);
+
+          if (sscanf(&colonpos[1], "%5u", &port_out)==0)
+            port_out=0;
+        }
+        else
+        {
+          showargs();
+          return 1;
+        }
       }
       else
-        strcpy(multicast_addr, argv[argn]);
+      {
+        if (strlen(argv[argn])<INET_ADDRSTRLEN)
+        {
+          strcpy(multicast_addr, argv[argn]);
+        }
+        else
+        {
+          showargs();
+          return 1;
+        }
+      }
     }
     else
     if ((strcmp(argv[argn], "-o")==0) && ((argn+1)<argc))
     {
       ++argn;
 
-      strcpy(ip_out, argv[argn]);
+      if (strlen(argv[argn])<INET_ADDRSTRLEN)
+      {
+        strcpy(ip_out, argv[argn]);
+      }
+      else
+      {
+        showargs();
+        return 1;
+      }
     }
 
     ++argn;
