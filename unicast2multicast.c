@@ -46,13 +46,11 @@ int main(int argc, char **argv)
   struct sockaddr_in inaddr;
   int insock;
   socklen_t inaddrlen;
-  ssize_t incnt;
   char message[9000];
 
   struct sockaddr_in outaddr;
   int outsock;
   socklen_t outaddrlen;
-  ssize_t outcnt;
 
   int argn=0;
   char ip_in[INET_ADDRSTRLEN+1]="";
@@ -224,6 +222,9 @@ int main(int argc, char **argv)
 
   while (1)
   {
+    ssize_t incnt;
+    ssize_t outcnt;
+
     incnt=recvfrom(insock, message, sizeof(message), 0, (struct sockaddr *) &inaddr, &inaddrlen);
 
     if (incnt<0)
